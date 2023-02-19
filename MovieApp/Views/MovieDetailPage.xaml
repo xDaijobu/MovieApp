@@ -1,0 +1,267 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<movieApp:BasePage
+    x:Class="MovieApp.Views.MovieDetailPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:models="clr-namespace:MovieApp.Models;assembly=MovieApp"
+    xmlns:movieApp="clr-namespace:MovieApp;assembly=MovieApp"
+    xmlns:pancakeView="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
+    xmlns:viewModels="clr-namespace:MovieApp.ViewModels;assembly=MovieApp"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    x:Name="myPage"
+    Padding="0"
+    x:DataType="viewModels:MovieDetailViewModel">
+    <ScrollView>
+        <Grid RowDefinitions="250, *">
+            <Grid Grid.Row="0">
+                <Image Aspect="Fill" Source="{Binding Movie.Backdrop}" />
+                <Path
+                    Margin="10"
+                    xct:TouchEffect.Command="{Binding PopClickedCommand}"
+                    xct:TouchEffect.NativeAnimation="True"
+                    Aspect="Fill"
+                    Data="M359,718L120,479L359,240L402,283L236,449L840,449L840,509L236,509L402,675L359,718Z"
+                    Fill="White"
+                    HeightRequest="20"
+                    HorizontalOptions="Start"
+                    Stroke="White"
+                    VerticalOptions="Start"
+                    WidthRequest="20" />
+            </Grid>
+            <Grid
+                Grid.Row="1"
+                Margin="10"
+                RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto"
+                RowSpacing="10">
+                <Label
+                    Grid.Row="0"
+                    FontAttributes="Bold"
+                    FontSize="Title"
+                    Text="{Binding Movie.Title}" />
+
+                <StackLayout Grid.Row="1" Orientation="Horizontal">
+                    <Label
+                        FontSize="12"
+                        TextColor="{StaticResource Primary}"
+                        VerticalTextAlignment="Center">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="★ " />
+                                <Span Text="{Binding Movie.VoteAverage}" />
+                                <Span Text="  &gt;  " />
+                                <Span Text="{Binding Movie.ReleaseDate, StringFormat='{0:yyyy}'}" TextColor="White" />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+
+                    <StackLayout Orientation="Horizontal">
+                        <pancakeView:PancakeView
+                            BackgroundColor="Transparent"
+                            CornerRadius="5"
+                            HorizontalOptions="Center">
+                            <pancakeView:PancakeView.Border>
+                                <pancakeView:Border Thickness="1" Color="{StaticResource Primary}" />
+                            </pancakeView:PancakeView.Border>
+                            <Label
+                                Padding="5,0"
+                                FontSize="12"
+                                HorizontalTextAlignment="Center"
+                                Text="13+"
+                                TextColor="{StaticResource Primary}" />
+                        </pancakeView:PancakeView>
+
+                        <pancakeView:PancakeView
+                            BackgroundColor="Transparent"
+                            CornerRadius="5"
+                            HorizontalOptions="Center">
+                            <pancakeView:PancakeView.Border>
+                                <pancakeView:Border Thickness="1" Color="{StaticResource Primary}" />
+                            </pancakeView:PancakeView.Border>
+                            <Label
+                                Padding="6,0"
+                                FontSize="12"
+                                HorizontalTextAlignment="Center"
+                                Text="{Binding Movie.OriginalLanguage}"
+                                TextColor="{StaticResource Primary}"
+                                TextTransform="Uppercase" />
+                        </pancakeView:PancakeView>
+
+                        <pancakeView:PancakeView
+                            BackgroundColor="Transparent"
+                            CornerRadius="5"
+                            HorizontalOptions="Center">
+                            <pancakeView:PancakeView.Border>
+                                <pancakeView:Border Thickness="1" Color="{StaticResource Primary}" />
+                            </pancakeView:PancakeView.Border>
+                            <Label
+                                Padding="6,0"
+                                FontSize="12"
+                                HorizontalTextAlignment="Center"
+                                Text="Subtitle"
+                                TextColor="{StaticResource Primary}" />
+                        </pancakeView:PancakeView>
+                    </StackLayout>
+                </StackLayout>
+
+                <Grid
+                    Grid.Row="2"
+                    Margin="0,5"
+                    ColumnDefinitions="*, *">
+                    <pancakeView:PancakeView
+                        Grid.Column="0"
+                        xct:TouchEffect.NativeAnimation="True"
+                        BackgroundColor="{StaticResource Primary}"
+                        CornerRadius="25">
+
+                        <Label
+                            Padding="5"
+                            FontAttributes="Bold"
+                            FontSize="18"
+                            HorizontalTextAlignment="Center"
+                            Text="Play" />
+                    </pancakeView:PancakeView>
+                    <pancakeView:PancakeView
+                        Grid.Column="1"
+                        xct:TouchEffect.NativeAnimation="True"
+                        CornerRadius="25">
+                        <pancakeView:PancakeView.Border>
+                            <pancakeView:Border Thickness="1" Color="{StaticResource Primary}" />
+                        </pancakeView:PancakeView.Border>
+                        <Label
+                            Padding="5"
+                            FontAttributes="Bold"
+                            FontSize="18"
+                            HorizontalTextAlignment="Center"
+                            Text="Download"
+                            TextColor="{StaticResource Primary}" />
+                    </pancakeView:PancakeView>
+                </Grid>
+                <Label
+                    Grid.Row="3"
+                    FontSize="Caption"
+                    Text="{Binding Genres}" />
+
+                <Label
+                    Grid.Row="4"
+                    FontSize="Caption"
+                    Text="{Binding Movie.Overview}" />
+
+                <ScrollView Grid.Row="5" Orientation="Horizontal">
+                    <StackLayout BindableLayout.ItemsSource="{Binding Casts}" Orientation="Horizontal">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="models:MediaCast">
+                                <Grid
+                                    ColumnDefinitions="Auto, Auto"
+                                    RowDefinitions="Auto"
+                                    RowSpacing="0">
+                                    <xct:AvatarView Grid.Column="0" Source="{Binding Profile}" />
+
+                                    <StackLayout
+                                        Grid.Column="1"
+                                        Orientation="Vertical"
+                                        Spacing="0">
+                                        <Label FontSize="12" Text="{Binding Name}" />
+                                        <Label
+                                            FontSize="12"
+                                            Text="Cast"
+                                            TextColor="LightGray" />
+                                    </StackLayout>
+                                </Grid>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </StackLayout>
+                </ScrollView>
+
+                <xct:TabView
+                    Grid.Row="6"
+                    HeightRequest="400"
+                    SelectedIndex="0"
+                    TabIndicatorColor="{StaticResource Primary}"
+                    TabStripBackgroundColor="Transparent">
+                    <xct:TabViewItem
+                        FontAttributes="Bold"
+                        FontSize="12"
+                        Text="Trailers"
+                        TextColor="White"
+                        TextColorSelected="{StaticResource Primary}">
+                        <ScrollView>
+                            <StackLayout BindableLayout.ItemsSource="{Binding Videos}" Orientation="Vertical">
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate x:DataType="models:Video">
+                                        <Grid ColumnDefinitions="200, *" RowDefinitions="150">
+                                            <pancakeView:PancakeView Grid.Column="0" CornerRadius="25">
+                                                <Grid
+                                                    xct:TouchEffect.Command="{Binding BindingContext.GoToVideoPopupCommand, Source={x:Reference Name=myPage}}"
+                                                    xct:TouchEffect.CommandParameter="{Binding YoutubeUrl}"
+                                                    xct:TouchEffect.NativeAnimation="True">
+                                                    <Image Aspect="AspectFit" Source="{Binding Thumbnail}" />
+
+                                                    <Path
+                                                        Aspect="Fill"
+                                                        Data="M383,650L650,480L383,310L383,650ZM480,880Q398,880 325,848.5Q252,817 197.5,762.5Q143,708 111.5,635Q80,562 80,480Q80,397 111.5,324Q143,251 197.5,197Q252,143 325,111.5Q398,80 480,80Q563,80 636,111.5Q709,143 763,197Q817,251 848.5,324Q880,397 880,480Q880,562 848.5,635Q817,708 763,762.5Q709,817 636,848.5Q563,880 480,880ZM480,820Q622,820 721,720.5Q820,621 820,480Q820,338 721,239Q622,140 480,140Q339,140 239.5,239Q140,338 140,480Q140,621 239.5,720.5Q339,820 480,820ZM480,480Q480,480 480,480Q480,480 480,480Q480,480 480,480Q480,480 480,480Q480,480 480,480Q480,480 480,480Q480,480 480,480Q480,480 480,480Z"
+                                                        HeightRequest="25"
+                                                        HorizontalOptions="Center"
+                                                        Stroke="White"
+                                                        VerticalOptions="Center"
+                                                        WidthRequest="25" />
+                                                </Grid>
+                                            </pancakeView:PancakeView>
+
+                                            <StackLayout Grid.Column="1" VerticalOptions="Center">
+                                                <Label Text="{Binding Name}" />
+                                                <Label Text="{Binding Duration}" />
+                                            </StackLayout>
+                                        </Grid>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </StackLayout>
+                        </ScrollView>
+                    </xct:TabViewItem>
+
+                    <xct:TabViewItem
+                        FontAttributes="Bold"
+                        FontSize="12"
+                        Text="Reviews"
+                        TextColor="White"
+                        TextColorSelected="{StaticResource Primary}">
+                        <CollectionView
+                            Margin="5"
+                            ItemsSource="{Binding Reviews}"
+                            RemainingItemsThreshold="0"
+                            RemainingItemsThresholdReachedCommand="{Binding ItemTresholdReachedCommand}"
+                            SelectionMode="None">
+                            <CollectionView.EmptyView>
+                                <Label
+                                    FontAttributes="Bold"
+                                    FontSize="18"
+                                    HorizontalTextAlignment="Center"
+                                    Text="There are no reviews yet." />
+                            </CollectionView.EmptyView>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="models:Review">
+                                    <Grid ColumnDefinitions="Auto, *" RowDefinitions="Auto, Auto, Auto">
+                                        <StackLayout Grid.Row="0" Orientation="Horizontal">
+                                            <xct:AvatarView Source="{Binding AuthorDetails.AvatarPath}" />
+                                            <Label
+                                                FontAttributes="Bold"
+                                                FontSize="12"
+                                                Text="{Binding AuthorDetails.UserName}"
+                                                VerticalTextAlignment="Center" />
+                                        </StackLayout>
+                                        <StackLayout />
+                                        <Label
+                                            Grid.Row="1"
+                                            Text="{Binding CreatedAt}"
+                                            TextColor="LightGray" />
+                                        <Label Grid.Row="2" Text="{Binding Content}" />
+                                    </Grid>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </xct:TabViewItem>
+                </xct:TabView>
+            </Grid>
+        </Grid>
+    </ScrollView>
+</movieApp:BasePage>
+

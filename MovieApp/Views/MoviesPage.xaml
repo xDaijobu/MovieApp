@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<movieApp:BasePage
+    x:Class="MovieApp.Views.MoviesPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:effects="http://xamarin.com/schemas/2020/toolkit"
+    xmlns:models="clr-namespace:MovieApp.Models;assembly=MovieApp"
+    xmlns:movieApp="clr-namespace:MovieApp;assembly=MovieApp"
+    xmlns:pancakeView="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
+    xmlns:viewModels="clr-namespace:MovieApp.ViewModels;assembly=MovieApp"
+    x:Name="myPage"
+    x:DataType="viewModels:MoviesViewModel">
+    <ContentPage.Content>
+        <Grid RowDefinitions="Auto, *">
+            <StackLayout
+                Grid.Row="0"
+                effects:TouchEffect.Command="{Binding PopClickedCommand}"
+                effects:TouchEffect.NativeAnimation="True"
+                Orientation="Horizontal"
+                Spacing="0">
+                <Path
+                    Margin="10"
+                    Aspect="Fill"
+                    Data="M359,718L120,479L359,240L402,283L236,449L840,449L840,509L236,509L402,675L359,718Z"
+                    Fill="White"
+                    HeightRequest="20"
+                    Stroke="White"
+                    WidthRequest="20" />
+                <Label
+                    Margin="10,0"
+                    FontAttributes="Bold"
+                    FontSize="24"
+                    Text="{Binding Genre.Name}"
+                    VerticalTextAlignment="Center" />
+            </StackLayout>
+            <CollectionView
+                Grid.Row="1"
+                Margin="5"
+                ItemsSource="{Binding Movies}"
+                RemainingItemsThreshold="0"
+                RemainingItemsThresholdReachedCommand="{Binding ItemTresholdReachedCommand}"
+                SelectionMode="None">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout
+                        HorizontalItemSpacing="6"
+                        Orientation="Vertical"
+                        Span="2"
+                        VerticalItemSpacing="6" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Movie">
+                        <StackLayout
+                            effects:TouchEffect.Command="{Binding BindingContext.GoToMovieDetailCommand, Source={x:Reference Name=myPage}}"
+                            effects:TouchEffect.CommandParameter="{Binding .}"
+                            effects:TouchEffect.NativeAnimation="True"
+                            Orientation="Vertical">
+                            <pancakeView:PancakeView CornerRadius="10">
+                                <pancakeView:PancakeView.Border>
+                                    <pancakeView:Border Color="#000000" />
+                                </pancakeView:PancakeView.Border>
+                                <Grid ColumnDefinitions="Auto" RowDefinitions="Auto">
+                                    <Image Aspect="AspectFill" Source="{Binding Poster}" />
+
+                                    <pancakeView:PancakeView
+                                        Margin="6,6,0,0"
+                                        BackgroundColor="{StaticResource Primary}"
+                                        CornerRadius="5"
+                                        HorizontalOptions="Start"
+                                        VerticalOptions="Start"
+                                        WidthRequest="25">
+                                        <Label
+                                            Padding="3"
+                                            FontSize="8"
+                                            HorizontalTextAlignment="Center"
+                                            Text="{Binding VoteAverage}" />
+                                    </pancakeView:PancakeView>
+
+                                </Grid>
+                            </pancakeView:PancakeView>
+                            <!--<Label
+                                Padding="5,0"
+                                FontAttributes="Bold"
+                                FontSize="10"
+                                HorizontalTextAlignment="Center"
+                                Text="{Binding Title}" />-->
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+    </ContentPage.Content>
+</movieApp:BasePage>

@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:PopupPage
+    x:Class="MovieApp.Controls.Popups.VideoPopup"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:pages="http://rotorgames.com"
+    BackgroundColor="#D9FFFFFF">
+    <pages:PopupPage.Animation>
+        <pages:MoveAnimation
+            DurationIn="300"
+            DurationOut="300"
+            EasingIn="SinOut"
+            EasingOut="SinIn"
+            HasBackgroundAnimation="True"
+            PositionIn="Right"
+            PositionOut="Right" />
+    </pages:PopupPage.Animation>
+    <WebView
+        x:Name="webView"
+        Margin="25,50"
+        HeightRequest="300" />
+</pages:PopupPage>
