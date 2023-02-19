@@ -3,5 +3,7 @@
     x:Class="MovieApp.BasePage"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:iOsSpecific="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
     Padding="5"
+    iOsSpecific:Page.UseSafeArea="true"
     BackgroundColor="{StaticResource Background}" />

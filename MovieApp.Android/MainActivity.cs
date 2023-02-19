@@ -1,7 +1,10 @@
 ﻿using Android.App;
 using Android.Content.PM;
+using Android.Graphics;
 using Android.Runtime;
 using Android.OS;
+using Android.Views;
+using Xamarin.Forms.Platform.Android;
 
 namespace MovieApp.Droid
 {
@@ -10,6 +13,12 @@ namespace MovieApp.Droid
     {
         protected override void OnCreate(Bundle savedInstanceState)
         {
+            if (Build.VERSION.SdkInt >= BuildVersionCodes.Lollipop)
+            {
+                Window.ClearFlags(WindowManagerFlags.TranslucentNavigation);
+                Window.SetStatusBarColor(Xamarin.Forms.Color.FromHex("#00B4D8").ToAndroid());
+            }
+
             base.OnCreate(savedInstanceState);
 
             Rg.Plugins.Popup.Popup.Init(this);
