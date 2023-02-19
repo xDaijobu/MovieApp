@@ -14,7 +14,21 @@ namespace MovieApp.ViewModels
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
-        public bool HasInternet => Connectivity.NetworkAccess == NetworkAccess.Internet;
+        public bool HasInternet
+        {
+            get
+            {
+                try
+                {
+                    return Connectivity.NetworkAccess == NetworkAccess.Internet;
+                }
+                catch (Exception e)
+                {
+                    return false;
+                }
+            }
+        }
+
         protected App CurrentApp => (Application.Current as App);
         protected INavigation CurrentNavigation => CurrentApp?.MainPage?.Navigation;
 
