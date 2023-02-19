@@ -32,6 +32,7 @@
 
             <effects:StateView StateKey="Success">
                 <ListView
+                    BackgroundColor="{StaticResource Background}"
                     HasUnevenRows="True"
                     IsPullToRefreshEnabled="True"
                     IsRefreshing="{Binding IsRunning}"

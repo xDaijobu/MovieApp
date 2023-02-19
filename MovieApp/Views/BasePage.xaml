@@ -6,4 +6,4 @@
     xmlns:iOsSpecific="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
     Padding="5"
     iOsSpecific:Page.UseSafeArea="true"
-    BackgroundColor="{StaticResource Background}" />
+    Background="{StaticResource Background}" />
