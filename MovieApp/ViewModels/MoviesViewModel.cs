@@ -6,8 +6,8 @@ namespace MovieApp.ViewModels
     public class MoviesViewModel : BaseViewModel
     {
         public Genre Genre { get; set; }
-        private ObservableRangeCollection<Movie> movies;
 
+        private ObservableRangeCollection<Movie> movies;
         public ObservableRangeCollection<Movie> Movies
         {
             get => movies;

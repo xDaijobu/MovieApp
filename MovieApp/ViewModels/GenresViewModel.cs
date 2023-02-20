@@ -20,7 +20,6 @@ namespace MovieApp.ViewModels
         }
 
         private bool isRunning;
-
         public bool IsRunning
         {
             get => isRunning;

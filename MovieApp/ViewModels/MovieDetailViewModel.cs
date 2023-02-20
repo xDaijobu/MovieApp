@@ -15,7 +15,6 @@ namespace MovieApp.ViewModels
         public string Genres => "Genre: " + string.Join(", ", Movie.Genres.Select(x => x.Name));
 
         private ObservableRangeCollection<MediaCast> casts;
-
         public ObservableRangeCollection<MediaCast> Casts
         {
             get => casts;
@@ -23,7 +22,6 @@ namespace MovieApp.ViewModels
         }
 
         private ObservableRangeCollection<Video> videos;
-
         public ObservableRangeCollection<Video> Videos
         {
             get => videos;
@@ -31,7 +29,6 @@ namespace MovieApp.ViewModels
         }
 
         private ObservableRangeCollection<Review> reviews;
-
         public ObservableRangeCollection<Review> Reviews
         {
             get => reviews;

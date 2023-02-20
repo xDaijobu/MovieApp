@@ -1,8 +1,6 @@
 ﻿using MovieApp.Services;
 using MovieApp.Views;
-using System;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace MovieApp
 {

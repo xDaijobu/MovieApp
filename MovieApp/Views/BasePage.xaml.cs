@@ -10,9 +10,7 @@ namespace MovieApp
         private BaseViewModel baseViewModel;
 
         public BasePage ()
-		{
-			InitializeComponent ();
-		}
+		    => InitializeComponent();
 
         protected override void OnBindingContextChanged()
         {

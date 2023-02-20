@@ -1,5 +1,4 @@
 ﻿using MovieApp.Models;
-using MovieApp.Services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -31,13 +30,6 @@ namespace MovieApp.ViewModels
 
         protected App CurrentApp => (Application.Current as App);
         protected INavigation CurrentNavigation => CurrentApp?.MainPage?.Navigation;
-
-        bool isBusy = false;
-        public bool IsBusy
-        {
-            get => isBusy;
-            set => SetProperty(ref isBusy, value);
-        }
 
         string title = string.Empty;
         public string Title
