@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using MovieApp.Models;
 using MovieApp.Views;
@@ -85,10 +86,12 @@ namespace MovieApp.ViewModels
             }
             catch (Exception ex)
             {
+                Debug.WriteLine(ex);
                 Device.BeginInvokeOnMainThread(async () =>
                 {
-                    await CurrentApp.MainPage.DisplayAlert("Error", ex.Message, "Ok");
+                   
                     CurrentState = LayoutState.Error;
+                    await CurrentApp.MainPage.DisplayAlert("Error", ex.Message, "Ok");
                 });
             }
             finally

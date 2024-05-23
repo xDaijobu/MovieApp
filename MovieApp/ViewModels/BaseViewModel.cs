@@ -21,7 +21,7 @@ namespace MovieApp.ViewModels
                 {
                     return Connectivity.NetworkAccess == NetworkAccess.Internet;
                 }
-                catch (Exception e)
+                catch
                 {
                     return false;
                 }

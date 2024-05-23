@@ -51,7 +51,7 @@ namespace MovieApp.Services
                 { "language", language }
             };
 
-            var genres = await GetAsync<Genres>(sb.ToString(), parameters);
+            var genres = await GetAsync<Genres>(sb.Replace("\n","").ToString(), parameters);
             return genres.Results;
         }
 
@@ -95,13 +95,15 @@ namespace MovieApp.Services
         public async Task<IEnumerable<Video>> GetVideos(int id, string language = "en-US")
         {
             var parameters = new Dictionary<string, object> { { "language", language } };
-            return GetAsync<Videos>($"movie/{id}/videos", parameters).Result.Results;
+            var data = await GetAsync<Videos>($"movie/{id}/videos", parameters);
+            return data.Results;
         }
 
 
         #region Others
         private async Task<T> GetAsync<T>(string cmd, IDictionary<string, object> parameters)
         {
+            
             var httpResponseMessage = await httpClient.GetAsync(CreateRequestUri(cmd, parameters), HttpCompletionOption.ResponseHeadersRead);
             var response = await httpResponseMessage.Content.ReadAsStringAsync();
             //Debug.WriteLine($"Response: {response}");
@@ -118,7 +120,7 @@ namespace MovieApp.Services
                     .Select(s => string.Concat(s.Key, "=", ConvertParameterValue(s.Value)))));
             }
 
-            Debug.WriteLine(sb);
+            Debug.WriteLine("Url: " + sb);
             return sb.ToString();
         }
 

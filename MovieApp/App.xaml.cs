@@ -11,7 +11,7 @@ namespace MovieApp
         {
             InitializeComponent();
 
-            MovieService = new MovieService(apiKey: "b7f8ec37c15f9a1853235c57710176c4");
+            MovieService = new MovieService(apiKey: "c6a572dac0934dcfa8680f958a3cfefb");
             MainPage = new GenresPage();
         }
 
