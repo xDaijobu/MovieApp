@@ -67,6 +67,7 @@ namespace MovieApp.ViewModels
                         Device.BeginInvokeOnMainThread(async () =>
                         {
                             await CurrentApp.MainPage.DisplayAlert("Error", "No internet connection", "Ok");
+                            await CurrentApp.MainPage.Navigation.PopAsync();
                         });
                         return;
                     }

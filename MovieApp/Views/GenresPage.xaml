@@ -4,6 +4,7 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:SkiaSharp.Extended.UI.Controls;assembly=SkiaSharp.Extended.UI"
+    xmlns:controls1="clr-namespace:MovieApp.Controls;assembly=MovieApp"
     xmlns:effects="http://xamarin.com/schemas/2020/toolkit"
     xmlns:models="clr-namespace:MovieApp.Models;assembly=MovieApp"
     xmlns:movieApp="clr-namespace:MovieApp;assembly=MovieApp"
@@ -11,10 +12,18 @@
     xmlns:viewModels="clr-namespace:MovieApp.ViewModels;assembly=MovieApp"
     x:Name="myPage"
     x:DataType="viewModels:GenresViewModel">
-    <Grid effects:StateLayout.CurrentState="{Binding CurrentState}" 
-          BackgroundColor="{StaticResource Background}">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <effects:IsNotNullOrEmptyConverter x:Key="IsNotNullOrEmptyConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <StackLayout
+        effects:StateLayout.CurrentState="{Binding CurrentState}"
+        BackgroundColor="{StaticResource Background}"
+        HorizontalOptions="FillAndExpand"
+        VerticalOptions="FillAndExpand">
         <effects:StateLayout.StateViews>
-            <effects:StateView StateKey="Loading">
+            <effects:StateView StateKey="Loading" VerticalOptions="FillAndExpand">
                 <controls:SKLottieView
                     HeightRequest="300"
                     HorizontalOptions="CenterAndExpand"
@@ -23,107 +32,105 @@
                     VerticalOptions="CenterAndExpand"
                     WidthRequest="300" />
             </effects:StateView>
-            <effects:StateView StateKey="Error">
-                <Button
-                    Command="{Binding GetDataCommand}"
-                    HorizontalOptions="CenterAndExpand"
-                    Text="Try Again"
-                    VerticalOptions="CenterAndExpand" />
+            <effects:StateView StateKey="Error" VerticalOptions="FillAndExpand">
+                <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+                    <Label Text="An error occurred while fetching data. Please try again later." />
+                    <Button Command="{Binding GetDataCommand}" Text="Try Again" />
+                </StackLayout>
+
             </effects:StateView>
 
             <effects:StateView StateKey="Success">
-                <CollectionView
+                <ListView
+                    BackgroundColor="{StaticResource Background}"
+                    HasUnevenRows="True"
+                    IsPullToRefreshEnabled="True"
+                    IsRefreshing="{Binding IsRunning}"
                     ItemsSource="{Binding MovieList}"
-                    SelectionMode="None">
-                    <CollectionView.ItemTemplate>
+                    RefreshCommand="{Binding GetDataCommand}"
+                    SelectionMode="None"
+                    SeparatorVisibility="None">
+                    <ListView.ItemTemplate>
                         <DataTemplate>
-                            <Grid
-                                Margin="5"
-                                x:DataType="models:MovieList"
-                                ColumnDefinitions="Auto, *"
-                                RowDefinitions="Auto, *"
-                                RowSpacing="10">
-                                <Label
-                                    Grid.Row="0"
-                                    Grid.Column="0"
-                                    FontAttributes="Bold"
-                                    FontSize="16"
-                                    HorizontalTextAlignment="Center"
-                                    Text="{Binding Genre.Name}"
-                                    VerticalTextAlignment="Center" />
+                            <ViewCell x:DataType="models:MovieList">
+                                <Grid
+                                    Margin="5"
+                                    ColumnDefinitions="Auto, *"
+                                    RowDefinitions="Auto, *"
+                                    RowSpacing="10">
+                                    <Label
+                                        Grid.Row="0"
+                                        Grid.Column="0"
+                                        FontAttributes="Bold"
+                                        FontSize="16"
+                                        HorizontalTextAlignment="Center"
+                                        Text="{Binding Genre.Name}"
+                                        VerticalTextAlignment="Center" />
 
-                                <Label
-                                    Grid.Row="0"
-                                    Grid.Column="1"
-                                    Padding="10,0"
-                                    effects:TouchEffect.Command="{Binding BindingContext.MoreClickedCommand, Source={x:Reference Name=myPage}}"
-                                    effects:TouchEffect.CommandParameter="{Binding .}"
-                                    effects:TouchEffect.NativeAnimation="True"
-                                    FontSize="12"
-                                    HorizontalOptions="EndAndExpand"
-                                    HorizontalTextAlignment="Center"
-                                    Text="See all"
-                                    TextColor="{StaticResource Primary}"
-                                    VerticalTextAlignment="Center" />
+                                    <Label
+                                        Grid.Row="0"
+                                        Grid.Column="1"
+                                        Padding="10,0"
+                                        effects:TouchEffect.Command="{Binding BindingContext.MoreClickedCommand, Source={x:Reference Name=myPage}}"
+                                        effects:TouchEffect.CommandParameter="{Binding .}"
+                                        effects:TouchEffect.NativeAnimation="True"
+                                        FontSize="12"
+                                        HorizontalOptions="EndAndExpand"
+                                        HorizontalTextAlignment="Center"
+                                        Text="See all"
+                                        TextColor="{StaticResource Primary}"
+                                        VerticalTextAlignment="Center" />
 
-                                <ScrollView
-                                    Grid.Row="1"
-                                    Grid.ColumnSpan="2"
-                                    Orientation="Horizontal">
-                                    <StackLayout BindableLayout.ItemsSource="{Binding Movies}" Orientation="Horizontal">
-                                        <BindableLayout.ItemTemplate>
-                                            <DataTemplate x:DataType="models:Movie">
-                                                <StackLayout
-                                                    effects:TouchEffect.Command="{Binding BindingContext.GoToMovieDetailCommand, Source={x:Reference Name=myPage}}"
-                                                    effects:TouchEffect.CommandParameter="{Binding .}"
-                                                    effects:TouchEffect.NativeAnimation="True"
-                                                    Orientation="Vertical"
-                                                    WidthRequest="100">
-                                                    <pancakeView:PancakeView CornerRadius="10" HeightRequest="150">
-                                                        <pancakeView:PancakeView.Border>
-                                                            <pancakeView:Border Color="#000000" />
-                                                        </pancakeView:PancakeView.Border>
-                                                        <Grid ColumnDefinitions="Auto" RowDefinitions="Auto">
-                                                            <Image Aspect="AspectFill" Source="{Binding Poster}" />
+                                    <ScrollView
+                                        Grid.Row="1"
+                                        Grid.ColumnSpan="2"
+                                        Orientation="Horizontal">
+                                        <StackLayout BindableLayout.ItemsSource="{Binding Movies}" Orientation="Horizontal">
+                                            <BindableLayout.ItemTemplate>
+                                                <DataTemplate x:DataType="models:Movie">
+                                                    <StackLayout
+                                                        effects:TouchEffect.Command="{Binding BindingContext.GoToMovieDetailCommand, Source={x:Reference Name=myPage}}"
+                                                        effects:TouchEffect.CommandParameter="{Binding .}"
+                                                        effects:TouchEffect.NativeAnimation="True"
+                                                        Orientation="Vertical"
+                                                        WidthRequest="100">
+                                                        <pancakeView:PancakeView CornerRadius="10" HeightRequest="150">
+                                                            <pancakeView:PancakeView.Border>
+                                                                <pancakeView:Border Color="#000000" />
+                                                            </pancakeView:PancakeView.Border>
+                                                            <Grid ColumnDefinitions="Auto" RowDefinitions="Auto">
+                                                                <Image Aspect="AspectFill" Source="{Binding Poster}" />
+                                                                <pancakeView:PancakeView
+                                                                    Margin="6,6,0,0"
+                                                                    BackgroundColor="{StaticResource Primary}"
+                                                                    CornerRadius="5"
+                                                                    HorizontalOptions="Start"
+                                                                    VerticalOptions="Start"
+                                                                    WidthRequest="25">
+                                                                    <Label
+                                                                        Padding="3"
+                                                                        FontSize="8"
+                                                                        HorizontalTextAlignment="Center"
+                                                                        Text="{Binding VoteAverage}" />
+                                                                </pancakeView:PancakeView>
 
-                                                          
-                                                            <pancakeView:PancakeView
-                                                                Margin="6,6,0,0"
-                                                                BackgroundColor="{StaticResource Primary}"
-                                                                CornerRadius="5"
-                                                                HorizontalOptions="Start"
-                                                                VerticalOptions="Start"
-                                                                WidthRequest="25">
-                                                                <Label
-                                                                    Padding="3"
-                                                                    FontSize="8"
-                                                                    HorizontalTextAlignment="Center"
-                                                                    Text="{Binding VoteAverage}" />
-                                                            </pancakeView:PancakeView>
-
-                                                        </Grid>
-                                                    </pancakeView:PancakeView>
-                                                    <!--<Label
-                                                Padding="5,0"
-                                                FontAttributes="Bold"
-                                                FontSize="10"
-                                                HorizontalTextAlignment="Center"
-                                                Text="{Binding Title}" />-->
-                                                </StackLayout>
-                                            </DataTemplate>
-                                        </BindableLayout.ItemTemplate>
-                                    </StackLayout>
-                                </ScrollView>
-                            </Grid>
-
+                                                            </Grid>
+                                                        </pancakeView:PancakeView>
+                                                    </StackLayout>
+                                                </DataTemplate>
+                                            </BindableLayout.ItemTemplate>
+                                        </StackLayout>
+                                    </ScrollView>
+                                </Grid>
+                            </ViewCell>
                         </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
+                    </ListView.ItemTemplate>
+                </ListView>
             </effects:StateView>
         </effects:StateLayout.StateViews>
 
 
 
-    </Grid>
+    </StackLayout>
 
 </movieApp:BasePage>

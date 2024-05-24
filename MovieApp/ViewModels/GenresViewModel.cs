@@ -62,11 +62,7 @@ namespace MovieApp.ViewModels
                 var movies = new List<MovieList>();
                 if (!HasInternet)
                 {
-                    Device.BeginInvokeOnMainThread(async () =>
-                    {
-                        await CurrentApp.MainPage.DisplayAlert("Error", "No internet connection", "Ok");
-                        CurrentState = LayoutState.Error;
-                    });
+                    ShowAlert("Sorry, we couldn't load the data. Please check your internet connection and try again later.");
                     return;
                 }
 
@@ -76,28 +72,43 @@ namespace MovieApp.ViewModels
                 {
                     var moviesByGenre = (await CurrentApp.MovieService.GetMovies(genre.Id, page: 1));
 
+                    foreach (var movie in moviesByGenre.Results)
+                    {
+                        UriImageSource imageSource = new UriImageSource
+                        {
+                            Uri = new Uri(movie.Poster),
+                            CachingEnabled = true, // Enable caching if needed
+                            CacheValidity = TimeSpan.FromDays(1) // Cache validity period
+                        };
+                        movie.ImageSource = imageSource;
+                    }                    
+                    
                     movies.Add(new MovieList(genre, moviesByGenre.Results));
                 }
 
                 MovieList.ReplaceRange(movies);
 
-                await Task.Delay(500);
+                // await Task.Delay(500);
                 CurrentState = LayoutState.Success;
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex);
-                Device.BeginInvokeOnMainThread(async () =>
-                {
-                   
-                    CurrentState = LayoutState.Error;
-                    await CurrentApp.MainPage.DisplayAlert("Error", ex.Message, "Ok");
-                });
+                ShowAlert(ex.Message);
             }
             finally
             {
                 IsRunning = false;
             }
+        }
+
+        private void ShowAlert(string message)
+        {
+            Device.BeginInvokeOnMainThread(async () =>
+            {
+                await CurrentApp.MainPage.DisplayAlert("Error", message, "Ok");
+                CurrentState = LayoutState.Error;
+            });
         }
     }
 }

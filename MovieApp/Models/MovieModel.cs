@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using Xamarin.Forms;
 
 namespace MovieApp.Models
 {
@@ -53,7 +54,7 @@ namespace MovieApp.Models
     }
 
 
-    public class Movie : Resource
+    public class Movie : Resource, INotifyPropertyChanged
     {
         [JsonProperty("title")]
         public string Title { get; internal set; }
@@ -73,6 +74,13 @@ namespace MovieApp.Models
         {
             get => Constants.BASE_IMAGE_URL + poster;
             set => poster = value;
+        }
+        
+        private ImageSource imgSource;
+        public ImageSource ImageSource
+        {
+            get => imgSource;
+            set => SetProperty(ref imgSource, value);
         }
 
         private string backdrop;
@@ -111,6 +119,31 @@ namespace MovieApp.Models
             Genres = new List<Genre>();
         }
 
+        
+        protected bool SetProperty<T>(ref T backingStore, T value,
+            [CallerMemberName] string propertyName = "",
+            Action onChanged = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(backingStore, value))
+                return false;
+
+            backingStore = value;
+            onChanged?.Invoke();
+            OnPropertyChanged(propertyName);
+            return true;
+        }
+
+        #region INotifyPropertyChanged
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            var changed = PropertyChanged;
+            if (changed == null)
+                return;
+
+            changed.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        #endregion
     }
 
     public class Movies : PagedResult<Movie>

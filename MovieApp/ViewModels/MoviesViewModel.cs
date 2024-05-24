@@ -1,5 +1,8 @@
 ﻿using MovieApp.Models;
+using System;
+using System.Linq;
 using Xamarin.CommunityToolkit.ObjectModel;
+using Xamarin.Forms;
 
 namespace MovieApp.ViewModels
 {
@@ -17,9 +20,22 @@ namespace MovieApp.ViewModels
         private int currentPage = 1;
         public IAsyncCommand ItemTresholdReachedCommand => new AsyncCommand(async () =>
         {
-            var datas = await CurrentApp.MovieService.GetMovies(Genre.Id, page: currentPage++);
+            try
+            {
+                Movies datas = await CurrentApp.MovieService.GetMovies(Genre.Id, page: currentPage++);
 
-            Movies.AddRange(datas.Results);
+                if (datas != null && datas.TotalCount > 0) 
+                {
+                    Movies.AddRange(datas.Results);
+                }
+            }
+            catch (Exception ex)
+            {
+                Device.BeginInvokeOnMainThread(async () =>
+                {
+                    await CurrentApp.MainPage.DisplayAlert("Error", ex.Message, "Ok");
+                });
+            }
         }, allowsMultipleExecutions: false);
 
         public MoviesViewModel(MovieList movieList)
